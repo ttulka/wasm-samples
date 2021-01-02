@@ -1,0 +1,18 @@
+<html>
+<head>
+  <title>Hello, World of Wasm!</title>
+</head>
+<body>
+
+<h1>The answer is <span class="answer">?</span></h1>
+
+<script type="text/javascript">
+  WebAssembly.instantiateStreaming(fetch('hello.wasm'))
+    .then(({instance}) => 
+      document.querySelector('.answer').innerHTML = 
+          instance.exports.main()  // 42
+    );
+</script>
+
+</body>
+</html>
