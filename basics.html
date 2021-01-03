@@ -12,10 +12,32 @@
 
       console.log('sum', instance.exports.sum(2, 3));
 
-      console.log('fac_loop', instance.exports.fac_loop(4));
-
-      console.log('fac_rec', instance.exports.fac_rec(4));
+      console.log('fac_loop -1', instance.exports.fac_loop(-1));
+      console.log('fac_loop 0', instance.exports.fac_loop(0));
+      console.log('fac_loop 1', instance.exports.fac_loop(1));
+      console.log('fac_loop 2', instance.exports.fac_loop(2));
+      console.log('fac_loop 3', instance.exports.fac_loop(3));
+      console.log('fac_loop 4', instance.exports.fac_loop(4));
+      
+      console.log('fac_rec 4', instance.exports.fac_rec(4));
     });
+
+  function factorial_loop(n) {
+    if (n <= 2) return n;
+    let fact = 1;
+    for (let i = 2; i <= n; i++) {
+        fact = fact * i;
+    }
+    return fact;
+  }
+
+  function factorial_rec(n) {
+    if (n <= 2) return n;
+    return n * factorial_rec(n - 1);
+  }
+
+  console.log('factorial_loop 4', factorial_loop(4));
+  console.log('factorial_rec 4', factorial_rec(4));
 </script>
 
 </body>
