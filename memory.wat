@@ -4,5 +4,5 @@
   
   (func (export "memory1") 
         (result i32)
-    i32.const 5  ;; length of data  
+    i32.const 5  ;; data length
     return))

@@ -5,7 +5,7 @@
 <body>
 
 <script type="text/javascript">
-  var mem = new WebAssembly.Memory();
+  var mem = new WebAssembly.Memory({initial:1});
 
   WebAssembly.instantiateStreaming(fetch('memory.wasm'), { 
       js: { mem } 
