@@ -1,0 +1,22 @@
+<html>
+<head>
+  <title>Wasm Memory</title>
+</head>
+<body>
+
+<script type="text/javascript">
+  var mem = new WebAssembly.Memory();
+
+  WebAssembly.instantiateStreaming(fetch('memory.wasm'), { 
+      js: { mem } 
+    })
+    .then(({instance}) => {      
+      var length = instance.exports.memory1();
+      var bytes = new Uint8Array(mem.buffer, 0, length);
+      var string = new TextDecoder('utf8').decode(bytes);
+      console.log('string', string);  // Hello
+    });
+</script>
+
+</body>
+</html>
