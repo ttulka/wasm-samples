@@ -8,9 +8,13 @@
   WebAssembly.instantiateStreaming(fetch('basics.wasm'))
     .then(({instance}) => {
       
-      console.log(instance.exports.Answer_to_the_Ultimate_Question());
+      console.log('Answer', instance.exports.Answer_to_the_Ultimate_Question());
 
-      console.log(instance.exports.sum(2, 3));
+      console.log('sum', instance.exports.sum(2, 3));
+
+      console.log('fac_loop', instance.exports.fac_loop(4));
+
+      console.log('fac_rec', instance.exports.fac_rec(4));
     });
 </script>
 
