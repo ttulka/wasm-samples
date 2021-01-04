@@ -23,7 +23,7 @@
 
   (func (export "getGlobal1") 
         (result i32)
-    (global.get $g1))
+    global.get $g1)
 
   (func (export "setGlobal1") 
         (param $value i32)
@@ -32,7 +32,7 @@
 
   (func (export "getGlobal2") 
         (result i32)
-    (global.get $g2))
+    global.get $g2)
 
   (func (export "setGlobal2") 
         (param $value i32)
