@@ -11,32 +11,47 @@
   (memory 1)
   (export "memory" (memory 0))
 
-  (data (i32.const 8) "hello\n")
+  (func $main (export "_start") (local $i i32) (local $continue i32)
 
-  (func $main (export "_start") (local $n i32)
-
+    ;; memory structure:
     ;;  0 | nread/nwritten
     ;;  4 | *iovs
-    ;;  8 | read iovs_len
+    ;;  8 | iovs_len
     ;; 12 | data space
 
     ;; memory space to read into
     (i32.store (i32.const 4) (i32.const 12))
-    (i32.store (i32.const 8) (i32.const 1))
+    (i32.store (i32.const 8) (i32.const 1))   ;; buffer of 1 char max
 
-    (call $fd_read
-      (i32.const 0) ;; file_descriptor - 0 for stdin
-      (i32.const 4) ;; *iovs - The pointer to the iov vector, which is stored at memory location 4
-      (i32.const 1) ;; iovs_len - We're reading 1 string to an iov - so one.
-      (i32.const 8) ;; nread - A place in memory to store the number of bytes read, 8+2=10
-    )
-    drop
+    (local.set $i (i32.const 12))
 
+    loop
+      (call $fd_read
+        (i32.const 0) ;; 0 for stdin
+        (i32.const 4) ;; *iovs
+        (i32.const 1) ;; iovs_len
+        (i32.const 0) ;; nread
+      )
+      drop
+
+      (local.set $continue
+        (i32.ne (i32.const 10)
+                (i32.load (local.get $i))))
+
+      (local.set $i (i32.add (local.get $i) (i32.const 1)))
+      (i32.store (i32.const 4) (local.get $i))
+      
+      (br_if 0 (local.get $continue))
+    end
+
+    (i32.store (i32.const 4) (i32.const 12))
+    (i32.store (i32.const 8) (i32.sub (local.get $i) (i32.const 13)))
+    
     (call $fd_write
-      (i32.const 1) ;; file_descriptor - 1 for stdout
-      (i32.const 4) ;; *iovs - The pointer to the iov vector, which is stored at memory location 4
-      (i32.const 1) ;; iovs_len - We're printing 1 string stored in an iov - so one.
-      (i32.const 0) ;; nwritten - A place in memory to store the number of bytes written, 8+6=14
+      (i32.const 1) ;; 1 for stdout
+      (i32.const 4) ;; *iovs 
+      (i32.const 1) ;; iovs_len
+      (i32.const 0) ;; nwritten
     )
     drop
   )

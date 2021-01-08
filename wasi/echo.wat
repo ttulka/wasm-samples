@@ -13,6 +13,7 @@
 
   (func $main (export "_start")
 
+    ;; memory structure:
     ;;  0 | nwritten
     ;;  4 | *iovs
     ;;  8 | iovs_len
@@ -20,21 +21,21 @@
 
     ;; memory space to read into
     (i32.store (i32.const 4) (i32.const 12))
-    (i32.store (i32.const 8) (i32.const 100))   ;; 100 chars max
+    (i32.store (i32.const 8) (i32.const 100))   ;; buffer of 100 chars max
 
     (call $fd_read
-      (i32.const 0) ;; file_descriptor - 0 for stdin
-      (i32.const 4) ;; *iovs - The pointer to the iov vector, which is stored at memory location 4
-      (i32.const 1) ;; iovs_len - We're reading 1 string to an iov - so one.
-      (i32.const 8) ;; nread - A place in memory to store the number of bytes read, 8+2=10
+      (i32.const 0) ;; 0 for stdin
+      (i32.const 4) ;; *iovs
+      (i32.const 1) ;; iovs_len
+      (i32.const 8) ;; nread, the new iovs_len to write 
     )
     drop
 
     (call $fd_write
-      (i32.const 1) ;; file_descriptor - 1 for stdout
-      (i32.const 4) ;; *iovs - The pointer to the iov vector, which is stored at memory location 4
-      (i32.const 1) ;; iovs_len - We're printing 1 string stored in an iov - so one.
-      (i32.const 0) ;; nwritten - A place in memory to store the number of bytes written, 8+6=14
+      (i32.const 1) ;; 1 for stdout
+      (i32.const 4) ;; *iovs 
+      (i32.const 1) ;; iovs_len
+      (i32.const 0) ;; nwritten
     )
     drop
   )
